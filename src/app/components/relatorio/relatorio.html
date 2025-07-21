@@ -1,0 +1,13 @@
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+  @for (items of valoresCards; track items.titulo){
+    <app-card
+      titulo="{{items.titulo}}"
+      valor="{{items.valor}}"
+      textColor="{{items.textColor}}"
+      icon="{{items.icon}}"
+      iconColor="{{items.iconColor}}"
+    ></app-card>
+  }
+
+</div>
