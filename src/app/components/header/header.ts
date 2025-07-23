@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild, AfterViewChecked} from '@angular/core';
 import {Button} from 'primeng/button';
 import {Dialog} from 'primeng/dialog';
 import {InputText} from 'primeng/inputtext';
@@ -26,11 +26,14 @@ interface ChatMessage {
   templateUrl: './header.html',
   styleUrl: './header.css'
 })
-export class Header {
+export class Header implements AfterViewChecked {
   chatVisible = false;
   messages: ChatMessage[] = [];
   currentMessage = '';
   private messageIdCounter = 1;
+  private shouldScrollToBottom = false;
+
+  @ViewChild('scrollPanel') scrollPanel!: ScrollPanel;
 
   constructor() {
     // Mensagem de boas-vindas
@@ -74,6 +77,7 @@ export class Header {
       timestamp: new Date()
     };
     this.messages.push(message);
+    this.shouldScrollToBottom = true;
   }
 
   private generateAIResponse(userMessage: string): string {
@@ -87,5 +91,23 @@ export class Header {
     ];
     
     return responses[Math.floor(Math.random() * responses.length)];
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.shouldScrollToBottom && this.scrollPanel) {
+      this.scrollToBottom();
+    }
+  }
+
+  private scrollToBottom(): void {
+    try {
+      const scrollElement = this.scrollPanel.el.nativeElement.querySelector('.p-scrollpanel-content');
+      if (scrollElement) {
+        scrollElement.scrollTop = scrollElement.scrollHeight;
+        this.shouldScrollToBottom = false;
+      }
+    } catch (err) {
+      console.error('Erro ao fazer scroll para o final:', err);
+    }
   }
 }
