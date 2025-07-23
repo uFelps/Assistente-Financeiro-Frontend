@@ -1,11 +1,66 @@
-<div class="flex justify-between items-end align-bottom py-10">
+<div class="flex flex-wrap gap-10 justify-between items-end align-bottom py-10">
   <div>
     <h1 class="text-3xl font-bold text-gray-900">Assistente Financeiro</h1>
     <p class="text-gray-600">Controle suas finanças de forma inteligente</p>
   </div>
 
   <div class="flex gap-4 items-end">
-    <p-button label="Assistente IA" icon="pi pi-comment" size="large" severity="secondary"></p-button>
-    <p-button label="Nova Transação" icon="pi pi-plus" size="large"></p-button>
+    <p-button label="Assistente IA" icon="pi pi-comment" size="large" severity="primary" (click)="openChat()"></p-button>
+    <p-button label="Nova Transação" icon="pi pi-plus" size="large"  severity="primary" variant="outlined"></p-button>
   </div>
 </div>
+
+<!-- Chat Overlay Dialog -->
+<p-dialog
+  [(visible)]="chatVisible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  header="Assistente IA Financeiro"
+  class="chat-dialog"
+  [style]="{ width: '30vw' }"
+  [breakpoints]="{ '800px': '75vw', '575px': '90vw' }"
+  (onHide)="closeChat()">
+
+  <div class="flex flex-col h-full">
+    <!-- Área de Mensagens -->
+    <div class="flex-1 mb-4">
+      <p-scrollPanel [style]="{width: '100%', height: '400px'}" class="custom-scrollpanel">
+        <div class="space-y-3 p-2">
+          @for (message of messages; track message.id) {
+            <div [ngClass]="message.isUser ? 'flex justify-end' : 'flex justify-start'">
+              <div [ngClass]="message.isUser ?
+                  'bg-blue-500 text-white rounded-lg rounded-br-sm shadow-sm animate-slide-in-right' :
+                  'bg-gray-100 text-gray-800 border border-gray-200 rounded-lg rounded-bl-sm shadow-sm animate-slide-in-left'"
+                class="max-w-xs lg:max-w-md px-4 py-2 transition-transform duration-200 hover:-translate-y-0.5">
+                <p class="text-sm">{{ message.text }}</p>
+                <span class="text-xs opacity-70 mt-1 block">
+                  {{ message.timestamp | date:'HH:mm' }}
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      </p-scrollPanel>
+    </div>
+
+    <!-- Campo de Input -->
+    <div class="flex gap-2 items-center border-t border-gray-200 pt-4">
+      <input
+        pInputText
+        [(ngModel)]="currentMessage"
+        (keydown)="onKeyDown($event)"
+        placeholder="Digite sua pergunta sobre finanças..."
+        class="flex-1 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
+        [style]="{width: '100%'}">
+      <p-button
+        icon="pi pi-send"
+        (click)="sendMessage()"
+        [disabled]="!currentMessage.trim()"
+        severity="primary"
+        size="small">
+      </p-button>
+    </div>
+  </div>
+</p-dialog>

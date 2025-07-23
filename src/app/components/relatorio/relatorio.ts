@@ -14,31 +14,31 @@ export class Relatorio {
   valoresCards = [
     {
       titulo : "Saldo Total",
-      valor : "R$ 0",
-      textColor: "green",
+      valor : "R$ 6000.00",
+      textColor: "text-blue-600",
       icon: "pi pi-dollar",
       iconColor: "color: gray"
     },
     {
+      titulo : "Transações",
+      valor : "10",
+      textColor: "text-black-600",
+      icon: "pi pi-chart-pie",
+      iconColor: "color: gray"
+    },
+    {
       titulo : "Entradas",
-      valor : "R$ 0",
-      textColor: "green",
+      valor : "R$ 6000.00",
+      textColor: "text-green-600",
       icon: "pi pi-arrow-up-right",
       iconColor: "color: green"
     },
     {
       titulo : "Saídas",
-      valor : "R$ 0",
-      textColor: "red",
+      valor : "R$ 1000.00",
+      textColor: "text-red-600",
       icon: "pi pi-arrow-down-right",
       iconColor: "color: red"
-    },
-    {
-      titulo : "Transações",
-      valor : "0",
-      textColor: "black",
-      icon: "pi pi-chart-pie",
-      iconColor: "color: gray"
-    },
+    }
   ];
 }

@@ -1,7 +1,7 @@
-<div class="bg-white py-6 px-8 rounded-lg ">
+<div class="bg-white py-4 px-5 md:py-6 md:px-8 rounded-lg ">
   <div class="flex items-center justify-between gap-1">
-    <p>{{titulo}}</p>
+    <p class="text-sm sm:text-base">{{titulo}}</p>
     <i [class]="icon" style="{{iconColor}}"></i>
   </div>
-  <h1 class="text-3xl font-bold text-{{textColor}}-600">{{valor}}</h1>
+  <h1 class="text-lg md:text-2xl font-bold whitespace-nowrap {{textColor}}">{{valor}}</h1>
 </div>
