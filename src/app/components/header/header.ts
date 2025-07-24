@@ -1,18 +1,18 @@
 import {Component} from '@angular/core';
-import {Button} from 'primeng/button';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {ChatAssistenteIa} from './chat-assistente-ia/chat-assistente-ia';
+import {NovaTransacao} from './nova-transacao/nova-transacao';
 
 
 
 @Component({
   selector: 'app-header',
   imports: [
-    Button,
     FormsModule,
     CommonModule,
-    ChatAssistenteIa
+    ChatAssistenteIa,
+    NovaTransacao
   ],
   templateUrl: './header.html',
   styleUrl: './header.css'
