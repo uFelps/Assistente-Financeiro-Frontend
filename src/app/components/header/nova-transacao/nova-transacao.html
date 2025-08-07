@@ -10,61 +10,80 @@
   [breakpoints]="{ '1200px': '75vw', '575px': '93vw' }"
 >
   <span class="p-text-secondary block mb-8">Infome os dados da transação</span>
-  <div class="grid grid-cols-2 gap-3">
-    <div class="flex flex-col gap-2 mb-4 w-full">
-      <label for="tipo" class="font-semibold w-24">Tipo</label>
-      <p-select
-        id="tipo"
-        [(ngModel)]="transacao.tipo"
-        [options]="tiposTransacoes"
-        optionLabel="name"
-        optionValue="name"
-        placeholder="-"
-        class="w-full"/>
+  <form [formGroup]="form">
+    <div class="grid grid-cols-2 gap-3">
+      <div class="flex flex-col gap-2 mb-4 w-full">
+        <label for="tipo" class="font-semibold w-24">Tipo</label>
+        <p-select
+          id="tipo"
+          formControlName="tipo"
+          [invalid]="form.get('tipo')?.invalid && form.get('tipo')?.touched"
+          [options]="tiposTransacoes"
+          optionLabel="name"
+          optionValue="name"
+          placeholder="-"
+          class="w-full"/>
+      </div>
+      <div class="flex flex-col gap-2 mb-4 w-full">
+        <label for="categoria" class="font-semibold w-24">Categoria</label>
+        <p-select
+          id="categoria"
+          formControlName="categoria"
+          [invalid]="form.get('categoria')?.invalid && form.get('tipo')?.touched"
+          [options]="form.get('tipo')?.value === 'Entrada' ? tiposCategoria.entrada : tiposCategoria.saida"
+          optionLabel="name"
+          placeholder="-"
+
+          class="w-full"/>
+      </div>
+
+      <div class="flex flex-col gap-2 mb-8 w-full">
+        <label for="valor" class="font-semibold w-24">Valor</label>
+        <p-inputnumber
+          id="valor"
+          formControlName="valor"
+          [invalid]="form.get('valor')?.invalid && form.get('valor')?.touched"
+          [min]="0"
+          [minFractionDigits]="0"
+          [maxFractionDigits]="2"
+          inputId="currency-brazil"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          inputStyleClass="w-full"></p-inputnumber>
+      </div>
+      <div class="flex flex-col gap-2 mb-8 w-full">
+        <label class="font-semibold w-24">Data</label>
+        <p-datepicker
+          formControlName="data"
+          [invalid]="form.get('data')?.invalid && form.get('data')?.touched"
+          [readonlyInput]="true"
+          [iconDisplay]="'input'"
+          [showIcon]="true"
+          inputId="icondisplay"
+          appendTo="body"
+          [baseZIndex]="10000"
+          [panelStyleClass]="'fixed-datepicker'"
+        ></p-datepicker>
+      </div>
     </div>
-    <div class="flex flex-col gap-2 mb-4 w-full">
-      <label for="categoria" class="font-semibold w-24">Categoria</label>
-      <p-select id="categoria" [(ngModel)]="transacao.categoria"
-                [options]="transacao.tipo ? (transacao.tipo === 'Entrada' ? tiposCategoria.entrada : tiposCategoria.saida) : []"
-                optionLabel="name"
-                placeholder="-" class="w-full"/>
+    <div class="flex flex-col gap-2 mb-8 w-full">
+      <label for="descricao" class="font-semibold w-24">Descrição</label>
+      <input
+        formControlName="descricao"
+        [invalid]="form.get('descricao')?.invalid && form.get('descricao')?.touched"
+        pInputText id="descricao"
+        class="flex-auto"
+        autocomplete="off"/>
     </div>
 
-    <div class="flex flex-col gap-2 mb-8 w-full">
-      <label for="valor" class="font-semibold w-24">Valor</label>
-      <p-inputnumber
-        id="valor"
-        [(ngModel)]="transacao.valor"
-        [min]="0"
-        [minFractionDigits]="0"
-        [maxFractionDigits]="2"
-        inputId="currency-brazil"
-        mode="currency"
-        currency="BRL"
-        locale="pt-BR"
-        inputStyleClass="w-full"></p-inputnumber>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancel" severity="secondary" (click)="visible = false"/>
+      <p-button label="Save" (click)="enviarTransacao()"/>
     </div>
-    <div class="flex flex-col gap-2 mb-8 w-full">
-      <label class="font-semibold w-24">Data</label>
-      <p-datepicker
-        [(ngModel)]="transacao.data"
-        [readonlyInput]="true"
-        [iconDisplay]="'input'"
-        [showIcon]="true"
-        inputId="icondisplay"
-        appendTo="body"
-        [baseZIndex]="10000"
-        [panelStyleClass]="'fixed-datepicker'"
-      ></p-datepicker>
-    </div>
-  </div>
-  <div class="flex flex-col gap-2 mb-8 w-full">
-    <label for="descricao" class="font-semibold w-24">Descrição</label>
-    <input [(ngModel)]="transacao.descricao" pInputText id="descricao" class="flex-auto" autocomplete="off"/>
-  </div>
-
-  <div class="flex justify-end gap-2">
-    <p-button label="Cancel" severity="secondary" (click)="visible = false"/>
-    <p-button label="Save" (click)="enviarTransacao()"/>
-  </div>
+  </form>
 </p-dialog>
+<p-toast
+  position="top-center"
+  [style]="{ 'max-width': '90vw'}"
+></p-toast>

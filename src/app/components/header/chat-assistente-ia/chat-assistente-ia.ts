@@ -31,11 +31,11 @@ interface ChatMessage {
 })
 export class ChatAssistenteIa implements AfterViewChecked {
 
-  chatVisible = false;
+  chatVisible : boolean = false;
   messages: ChatMessage[] = [];
-  currentMessage = '';
-  private messageIdCounter = 1;
-  private shouldScrollToBottom = false;
+  currentMessage : string = '';
+  private messageIdCounter : number = 1;
+  private shouldScrollToBottom : boolean = false;
 
   @ViewChild('scrollPanel') scrollPanel!: ScrollPanel;
 
@@ -85,7 +85,7 @@ export class ChatAssistenteIa implements AfterViewChecked {
   }
 
   private generateAIResponse(userMessage: string): string {
-    const responses = [
+    const responses : string[] = [
       'Entendi sua pergunta sobre finanças. Posso ajudá-lo a organizar melhor seu orçamento.',
       'Baseado na sua consulta, recomendo que você analise seus gastos mensais primeiro.',
       'Ótima pergunta! Para uma gestão financeira eficiente, sugiro categorizar suas despesas.',
