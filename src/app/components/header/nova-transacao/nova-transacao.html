@@ -16,11 +16,11 @@
         <label for="tipo" class="font-semibold w-24">Tipo</label>
         <p-select
           id="tipo"
-          formControlName="tipo"
-          [invalid]="form.get('tipo')?.invalid && form.get('tipo')?.touched"
+          formControlName="tipoTransacao"
+          [invalid]="form.get('tipoTransacao')?.invalid && form.get('tipoTransacao')?.touched"
           [options]="tiposTransacoes"
           optionLabel="name"
-          optionValue="name"
+          optionValue="enum"
           placeholder="-"
           class="w-full"/>
       </div>
@@ -29,11 +29,11 @@
         <p-select
           id="categoria"
           formControlName="categoria"
-          [invalid]="form.get('categoria')?.invalid && form.get('tipo')?.touched"
-          [options]="form.get('tipo')?.value === 'Entrada' ? tiposCategoria.entrada : tiposCategoria.saida"
+          [invalid]="form.get('categoria')?.invalid && form.get('tipoTransacao')?.touched"
+          [options]="form.get('tipoTransacao')?.value === 'ENTRADA' ? tiposCategoria.entrada : tiposCategoria.saida"
           optionLabel="name"
+          optionValue="enum"
           placeholder="-"
-
           class="w-full"/>
       </div>
 
@@ -55,7 +55,7 @@
       <div class="flex flex-col gap-2 mb-8 w-full">
         <label class="font-semibold w-24">Data</label>
         <p-datepicker
-          formControlName="data"
+          formControlName="dataHora"
           [invalid]="form.get('data')?.invalid && form.get('data')?.touched"
           [readonlyInput]="true"
           [iconDisplay]="'input'"

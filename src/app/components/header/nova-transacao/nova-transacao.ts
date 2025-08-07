@@ -9,6 +9,7 @@ import {DatePicker} from 'primeng/datepicker';
 import {ToastModule} from 'primeng/toast';
 import {MessageService} from 'primeng/api';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {TransacaoService} from '../../../services/transacao.service';
 
 @Component({
   selector: 'app-nova-transacao',
@@ -30,47 +31,39 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 export class NovaTransacao {
 
   tiposTransacoes = [
-    {name: 'Entrada'},
-    {name: 'Saída'},
+    {name: 'Entrada', enum: "ENTRADA"},
+    {name: 'Saída', enum: "SAIDA"},
   ];
 
   tiposCategoria = {
     entrada: [
-      {name: 'Salário'},
-      {name: 'Freelancer'},
-      {name: 'Investimentos'},
-      {name: 'Outro'},
+      {name: 'Salário', enum: 'SALARIO'},
+      {name: 'Freelancer', enum: 'FREELANCER'},
+      {name: 'Investimentos', enum: 'INVESTIMENTOS'},
+      {name: 'Outro', enum: 'OUTRO'},
     ],
     saida: [
-      {name: 'Moradia'},
-      {name: 'Alimentação'},
-      {name: 'Transporte'},
-      {name: 'Saúde'},
-      {name: 'Educação'},
-      {name: 'Lazer'},
-      {name: 'Outro'},
+      {name: 'Moradia', enum: 'MORADIA'},
+      {name: 'Alimentação', enum: 'ALIMENTACAO'},
+      {name: 'Transporte', enum: 'TRANSPORTE'},
+      {name: 'Saúde', enum: 'SAUDE'},
+      {name: 'Educação', enum: 'EDUCACAO'},
+      {name: 'Lazer', enum: 'LAZER'},
+      {name: 'Outro', enum: 'OUTRO'},
     ]
-  };
-
-  transacao = {
-    tipo: '',
-    valor: 0,
-    categoria: '',
-    descricao: '',
-    data: ''
   };
 
   form: FormGroup;
 
   visible: boolean = false;
 
-  constructor(private messageService: MessageService, private formBuilder: FormBuilder) {
+  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private transacaoService: TransacaoService) {
     this.form = this.formBuilder.group({
-      tipo: ['', Validators.required],
+      tipoTransacao: ['', Validators.required],
       valor: [0, [Validators.required, Validators.min(0.01)]],
       categoria: ['', Validators.required],
       descricao: ['', Validators.required],
-      data: ['', Validators.required]
+      dataHora: ['', Validators.required]
     });
   }
 
@@ -79,6 +72,33 @@ export class NovaTransacao {
   }
 
   enviarTransacao() {
+    this.validarForm()
+
+    this.transacaoService.adicionarTransacao(this.form.value)
+      .subscribe({
+        next: (response) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Transação adicionada com sucesso!',
+            life: 3000
+          });
+          this.visible = false;
+          this.form.reset();
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Não foi possível adicionar a transação. Tente novamente.',
+            life: 3000
+          });
+          console.error('Erro ao adicionar transação:', error);
+        }
+      });
+  }
+
+  validarForm() {
     if (this.form.invalid) {
       Object.keys(this.form.controls).forEach(key => {
         const control = this.form.get(key);
@@ -95,16 +115,6 @@ export class NovaTransacao {
       });
       return;
     }
-
-
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Sucesso',
-      detail: 'Transação salva com sucesso!',
-      life: 3000 // tempo em ms que a mensagem ficará visível
-    });
-    this.visible = false;
-    console.log(this.transacao);
   }
 
 }
